@@ -1,1 +1,1 @@
-Practicing problems from rosalind and i try to learn more about bioinformatics
+Practicing problems from rosalind as i try to learn more about bioinformatics
