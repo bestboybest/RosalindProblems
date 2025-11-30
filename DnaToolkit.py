@@ -1,4 +1,5 @@
 Nucleotides = ["A", "C", "G", "T"]
+Complements = {"A":"T", "C":"G", "G":"C", "T":"A"}
 
 def validateSeq(seq):
     for nuc in seq:
@@ -6,11 +7,15 @@ def validateSeq(seq):
             return False
     return seq.upper()
 
-def len(seq):
-    return len(seq)
-
 def countNucs(seq):
-    count = {}
-    for nuc in Nucleotides:
-        count[nuc] = seq.count(nuc)
-    return count
+    return {nuc: seq.count(nuc) for nuc in Nucleotides}
+
+def transcribe(seq):
+    return seq.replace("T", "U")
+
+def complement(seq):
+    return "".join(Complements[nuc] for nuc in seq)
+
+def revComplement(seq):
+    return complement(seq)[::-1]
+
