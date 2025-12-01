@@ -65,3 +65,13 @@ def findSubstrings(seq, subseq):
         if seq[i:i+len(subseq)] == subseq:
             positions.append(i+1)
     return positions
+
+def consensus(seqs):
+    avSeq = []
+    seqs = list(seqs.values())
+    for i in range(len(seqs[0])):
+        tempSeq = [seqs[j][i] for j in range(len(seqs))]
+        avSeq.append(max(set(tempSeq), key = tempSeq.count))
+    return "".join(avSeq)
+
+
