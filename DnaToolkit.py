@@ -74,4 +74,19 @@ def consensus(seqs):
         avSeq.append(max(set(tempSeq), key = tempSeq.count))
     return "".join(avSeq)
 
-
+def longestMotif(seqs):
+    seqs = list(seqs.values())
+    short = min(seqs, key = len)
+    x = len(short)
+    while True:
+        if x == 0:
+            return ""
+        for i in range(len(short) - x + 1):
+            check = True
+            for seq in seqs:
+                if short[i: i + x] not in seq:
+                    check = False
+                    break
+            if check:
+                return short[i:i + x]
+        x -= 1
