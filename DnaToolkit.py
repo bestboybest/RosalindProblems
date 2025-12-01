@@ -41,3 +41,13 @@ def revComplement(seq):
 def gcContent(seq):
     return ((seq.count("C") + seq.count("G"))/len(seq)) * 100
     
+def hamming(seq1, seq2):
+    if (len(seq1) != len(seq2)):
+        return False
+    distance = 0
+    for i in range(len(seq1)):
+        if (seq1[i] != seq2[i]):
+            distance += 1
+    return distance
+
+

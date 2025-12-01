@@ -11,4 +11,4 @@ for id, seq in seqs.items():
         maxId = id
 
 print(maxId)
-print(gcContent(seqs[maxId]))
+print(gcCont)
