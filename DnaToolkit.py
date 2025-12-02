@@ -4,12 +4,19 @@ Aminos = {"UUU": "F", "UUC": "F", "UUG": "L", "UUA": "L", "UCU": "S", "UCC": "S"
 
 strongDir = "./Bioinformatics Stronghold/Input/"
 
+import requests
+import re
+
 def readFasta(file):
-    with open(file) as f:
-      first = 0
-      finalSeqs = {}
-      seqs = []
-      for line in f:
+    if not file.startswith(">"):
+        with open(file, "r") as f:
+            fasta = f.readlines()
+    else:
+        fasta = file.splitlines()
+    first = 0
+    finalSeqs = {}
+    seqs = []
+    for line in fasta:
         if line.startswith(">"):
             if (first != 0):
                 finalSeqs[head] = "".join(seqs)
@@ -18,7 +25,7 @@ def readFasta(file):
             first = 1
         else:
             seqs.append(line.strip())
-      finalSeqs[head] = "".join(seqs)
+    finalSeqs[head] = "".join(seqs)
     return finalSeqs
 
 def validateSeq(seq):
@@ -90,3 +97,10 @@ def longestMotif(seqs):
             if check:
                 return short[i:i + x]
         x -= 1
+
+def getUniprot(Uniprot_id):
+    res = requests.get(f'http://www.uniprot.org/uniprot/{Uniprot_id}.fasta')
+    if res.status_code != 200:
+        return None
+    fasta = res.text
+    return readFasta(fasta)
