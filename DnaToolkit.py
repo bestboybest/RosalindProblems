@@ -7,6 +7,7 @@ strongDir = "./Bioinformatics Stronghold/Input/"
 import requests
 import re
 
+#functionality to read from fasta string or file
 def readFasta(file):
     if not file.startswith(">"):
         with open(file, "r") as f:
@@ -66,10 +67,16 @@ def translate(seq):
 def proteins(seq):
     return [protein for protein in seq.split("*") if protein != ""]
 
-def findSubstrings(seq, subseq):
+#functionality to find from string/regex 
+def findMotifs(seq, motif, motifLength = 0):
+    if not any(c in motif for c in ".?[]()|^$"):
+        motifLength = len(motif)
+    if motifLength == 0:
+        print("MF u forgot to write motifLength")
+        return []
     positions = []
-    for i in range(len(seq) - len(subseq) + 1):
-        if seq[i:i+len(subseq)] == subseq:
+    for i in range(len(seq) - motifLength+ 1):
+        if re.fullmatch(motif, seq[i:i+motifLength]):
             positions.append(i+1)
     return positions
 
@@ -99,7 +106,10 @@ def longestMotif(seqs):
         x -= 1
 
 def getUniprot(Uniprot_id):
-    res = requests.get(f'http://www.uniprot.org/uniprot/{Uniprot_id}.fasta')
+    if "_" in Uniprot_id:
+        Uniprot_id = re.match(r"^[^_]+", Uniprot_id).group()
+    url = f'http://www.uniprot.org/uniprot/{Uniprot_id}.fasta'
+    res = requests.get(url)
     if res.status_code != 200:
         return None
     fasta = res.text
