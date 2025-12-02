@@ -106,8 +106,7 @@ def longestMotif(seqs):
         x -= 1
 
 def getUniprot(Uniprot_id):
-    if "_" in Uniprot_id:
-        Uniprot_id = re.match(r"^[^_]+", Uniprot_id).group()
+    Uniprot_id = re.match(r"^[^_]+", Uniprot_id).group()
     url = f'http://www.uniprot.org/uniprot/{Uniprot_id}.fasta'
     res = requests.get(url)
     if res.status_code != 200:
