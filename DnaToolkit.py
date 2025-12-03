@@ -70,7 +70,7 @@ def proteins(seq):
 #functionality to find from string/regex 
 def findMotifs(seq, motif):
     positions = []
-    for match in re.compile(motif).finditer(seq):
+    for match in re.finditer(motif, seq):
         positions.append(match.start() + 1)
     return positions
 
