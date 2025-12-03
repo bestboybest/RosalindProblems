@@ -5,4 +5,5 @@ Check out DNATooklit.py, it has all the main functions developed to solve the ro
 Ill list my favorite questions solved so far here:
 
 Bioinformatics Stronghold:
-1) (16) Finding a Protein Motif
+1) (16) Finding a Protein Motif (Regex based motif search on proteins from UniProt)
+2) (18) Open Reading Frames (All distinct proteins that can be translated from all ORFs of Dna strand)

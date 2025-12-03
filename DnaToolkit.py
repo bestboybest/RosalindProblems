@@ -1,5 +1,6 @@
 Nucleotides = ["A", "C", "G", "T"]
-Complements = {"A":"T", "C":"G", "G":"C", "T":"A"}
+ComplementsD = {"A":"T", "C":"G", "G":"C", "T":"A"}
+ComplementsR = {"A":"U", "C":"G", "G":"C", "U":"A"}
 Aminos = {"UUU": "F", "UUC": "F", "UUG": "L", "UUA": "L", "UCU": "S", "UCC": "S", "UCA": "S", "UCG": "S", "UAU": "Y", "UAC": "Y", "UAA": "*", "UAG": "*", "UGU": "C", "UGC": "C", "UGA": "*", "UGG": "W", "CUU": "L", "CUA": "L", "CUC": "L", "CUG": "L", "CCC": "P", "CCU": "P", "CCA": "P", "CCG": "P", "CAU": "H", "CAC": "H", "CAG": "Q", "CAA": "Q", "CGU": "R", "CGG":"R", "CGA":"R", "CGC":"R", "AUU": "I", "AUC": "I", "AUA": "I", "AUG" : "M", "ACU":"T", "ACC":"T", "ACG":"T", "ACA":"T", "AAU":"N", "AAC":"N", "AAA":"K", "AAG":"K", "AGU": "S", "AGC":"S", "AGA":"R", "AGG":"R", "GUU":"V", "GUA":"V", "GUG":"V", "GUC":"V", "GCU":"A", "GCC":"A", "GCG":"A", "GCA":"A", "GAU":"D", "GAC":"D", "GAA":"E", "GAG":"E", "GGU":"G", "GGG":"G", "GGA":"G", "GGC":"G"}
 
 strongDir = "./Bioinformatics Stronghold/Input/"
@@ -42,7 +43,10 @@ def transcribe(seq):
     return seq.replace("T", "U")
 
 def complement(seq):
-    return "".join(Complements[nuc] for nuc in seq)
+    if "T" in seq:
+        return "".join(ComplementsD[nuc] for nuc in seq)
+    else:
+        return "".join(ComplementsR[nuc] for nuc in seq)
 
 def revComplement(seq):
     return complement(seq)[::-1]
@@ -61,14 +65,14 @@ def hamming(seq1, seq2):
 
 def translate(seq):
     if (len(seq) % 3 != 0):
-        return False
+        seq = seq[0:len(seq) - (len(seq) % 3)]
     return "".join([Aminos[seq[i:i+3]] for i in range(0, len(seq), 3)])
 
 def proteins(seq):
-    return [protein for protein in seq.split("*") if protein != ""]
+    return [prot[:-1] for prot in re.findall(r"(?=(M[^*]*\*))", seq)]
 
 #functionality to find from string/regex 
-def findMotifs(seq, motif):
+def findMotifs(seq, motif): 
     positions = []
     for match in re.finditer(motif, seq):
         positions.append(match.start() + 1)
@@ -107,3 +111,14 @@ def getUniprot(Uniprot_id):
         return None
     fasta = res.text
     return readFasta(fasta)
+
+def translatePar(seq):
+    proteins1 = proteins(translate(seq))
+    proteins2 = proteins(translate(seq[1:]))
+    proteins3 = proteins(translate(seq[2:]))
+    return proteins1+proteins2+proteins3
+
+def translateORFs(seq):
+    proteinss1 = translatePar(seq)
+    proteinss2 = translatePar(revComplement(seq))
+    return proteinss1 + proteinss2
