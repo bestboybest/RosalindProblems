@@ -68,16 +68,10 @@ def proteins(seq):
     return [protein for protein in seq.split("*") if protein != ""]
 
 #functionality to find from string/regex 
-def findMotifs(seq, motif, motifLength = 0):
-    if not any(c in motif for c in ".?[]()|^$"):
-        motifLength = len(motif)
-    if motifLength == 0:
-        print("MF u forgot to write motifLength")
-        return []
+def findMotifs(seq, motif):
     positions = []
-    for i in range(len(seq) - motifLength+ 1):
-        if re.fullmatch(motif, seq[i:i+motifLength]):
-            positions.append(i+1)
+    for match in re.compile(motif).finditer(seq):
+        positions.append(match.start() + 1)
     return positions
 
 def consensus(seqs):

@@ -5,7 +5,7 @@ with open(strongDir + "rosalind_mprt.txt") as f:
 
 for prot in proteins:
     seq = list(getUniprot(prot).values())[0]
-    positions = findMotifs(seq, r"N[^P][ST][^P]", 4)
+    positions = findMotifs(seq, r"N[^P][ST][^P]")
     if positions != []:
         print(prot)
         print(*positions)
