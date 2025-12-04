@@ -126,5 +126,13 @@ def translateORFs(seq):
     proteinss2 = translatePar(revComplement(seq))
     return proteinss1 + proteinss2
 
-def protMass(seq):
-    return sum(Residues[amino] for amino in seq) + H20
+def protMass(seq, full = 0):
+    base = sum(Residues[amino] for amino in seq)
+    return (base + H20) if full else base
+
+def revPal(seq, length):
+    positions = []
+    for i in range(len(seq)-length+1):
+        if seq[i:i+length] == revComplement(seq[i:i+length]):
+            positions.append(i+1)
+    return positions
